@@ -25,3 +25,5 @@ if ($buildApp -eq $true)
     docker build --rm -f "./src/webapp/Dockerfile" -t "$($dockerRegistry)/$($dockerWebAppRepository)" "./src/webapp"   
     docker push "$($dockerRegistry)/$($dockerWebAppRepository)"
 }
+
+docker logout $dockerRegistry
