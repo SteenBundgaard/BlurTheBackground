@@ -1,0 +1,7 @@
+version: '3.3'
+services:
+  webapp:
+    image: blurthebackground-webapp:latest
+    restart: always
+    ports: 
+      -  "3000:3000"
