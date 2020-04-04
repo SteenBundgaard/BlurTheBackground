@@ -1,12 +1,21 @@
 import App from './App';
-import {BrowserRouter}  from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import React from 'react';
 import { hydrate } from 'react-dom';
+import { Provider } from 'react-redux';
+import configureStore from './common/configureStore';
+import { routerMiddleware } from 'react-router-redux'
+import { history } from './components/helpers/history';
+
+const middleware = routerMiddleware(history)
+const store = configureStore([middleware]);
 
 hydrate(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Router history={history}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>,
   document.getElementById('root')
 );
 

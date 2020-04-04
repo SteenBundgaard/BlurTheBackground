@@ -1,10 +1,16 @@
 import http from 'http';
+import https from 'https';
+import fs from 'fs';
 
 let app = require('./server').default;
 
-const server = http.createServer(app);
+const server = process.env.NODE_ENV === 'production' ? http.createServer(app) :
+  https.createServer({
+    key: fs.readFileSync(process.env.ServerPrivateKey),
+    cert: fs.readFileSync(process.env.ServerCertificate)
+  }, app);
 
-let currentApp = app;
+let currentApp = app; 
 
 server.listen(process.env.PORT || 3000, error => {
   if (error) {

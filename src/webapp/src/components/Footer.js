@@ -24,7 +24,7 @@ class Footer extends Component {
                         <div className="col l3 s12">
                             <h5 className="white-text">Contact</h5>
                             <ul>
-                                <li><address><a className="white-text" href="mailto:webmaster@example.com">Jon Doe</a></address></li>                               
+                                <li><address><a className="white-text" href="mailto:blurbackgroundonline@gmail.com">Jon Doe</a></address></li>                               
                             </ul>
                         </div>
                     </div>
