@@ -17,8 +17,8 @@ class Footer extends Component {
                         <div className="col l3 s12">
                             <h5 className="white-text">Miscellaneous</h5>
                             <ul>
-                                <li><Link to="/TermsOfService" className="white-text">Terms of Service</Link></li>
-                                <li><Link to="/PrivacyPolicy" className="white-text">Privacy Policy</Link></li>
+                                <li><Link to="/terms-of-service" className="white-text">Terms of Service</Link></li>
+                                <li><Link to="/privacy-policy" className="white-text">Privacy Policy</Link></li>
                             </ul>
                         </div>
                         <div className="col l3 s12">

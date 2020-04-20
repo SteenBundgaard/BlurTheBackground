@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import Item1 from '../images/item1.jpg'
 import Item2 from '../images/item2.jpg'
 import Item3 from '../images/item3.jpg'
+import { connect } from 'react-redux'
 
 class Front extends Component {
-   
+
     render() {
         return (
             <div>
@@ -18,7 +19,8 @@ class Front extends Component {
                                 <h5 className="header col s12 light">An AI based approach to improve foreground-background seperation on portraits</h5>
                             </div>
                             <div className="row center">
-                                <Link to="/tryit" className="btn-large waves-effect waves-light teal lighten-1">Try It</Link>
+                            {!this.props.isAuthenticated && <Link to="/try-it" className="btn-large waves-effect waves-light teal lighten-1">Try It</Link>}
+                            {this.props.isAuthenticated && <Link to="/upload" className="btn-large waves-effect waves-light teal lighten-1">Upload</Link>}
                             </div>
                             <br /><br />
                         </div>
@@ -67,36 +69,42 @@ class Front extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="parallax"><img src={Item2} alt="Unsplashed background img 2"/></div>
-                    </div>
+                    <div className="parallax"><img src={Item2} alt="Unsplashed background img 2" /></div>
+                </div>
 
-                    <div className="container">
-                        <div className="section">
+                <div className="container">
+                    <div className="section">
 
-                            <div className="row">
-                                <div className="col s12 center">
-                                    <h3><i className="mdi-content-send brown-text"></i></h3>
-                                    <h4>The future of photography</h4>
-                                    <p className="left-align light">The relationship between traditional photography and computing has become ever more tenuous in recent years. The compact camera market has collapsed and the average consumer has moved to smartphone photography which in turn produces phenomenal results using tiny image sensors but with a huge computational backend. The emerging technology will soon allow these tiny cameras to produce as good results as traditional heavy weight equipment with large cameras and huge lenses. Sadly this technology can also be used for other things like deepfake.</p>
-                                </div>
+                        <div className="row">
+                            <div className="col s12 center">
+                                <h3><i className="mdi-content-send brown-text"></i></h3>
+                                <h4>The future of photography</h4>
+                                <p className="left-align light">The relationship between traditional photography and computing has become ever more tenuous in recent years. The compact camera market has collapsed and the average consumer has moved to smartphone photography which in turn produces phenomenal results using tiny image sensors but with a huge computational backend. The emerging technology will soon allow these tiny cameras to produce as good results as traditional heavy weight equipment with large cameras and huge lenses. Sadly this technology can also be used for other things like deepfake.</p>
                             </div>
-
                         </div>
+
                     </div>
-                    <div className="parallax-container valign-wrapper">
-                        <div className="section no-pad-bot">
+                </div>
+                <div className="parallax-container valign-wrapper">
+                    <div className="section no-pad-bot">
                         <div className="container">
                             <div className="row center">
-                            <h5 className="header col s12 light">Improve your existing portraits</h5>
+                                <h5 className="header col s12 light">Improve your existing portraits</h5>
                             </div>
                         </div>
-                        </div>
-                        <div className="parallax"><img src={Item3} alt="Unsplashed background img 3"/></div>
                     </div>
-
+                    <div className="parallax"><img src={Item3} alt="Unsplashed background img 3" /></div>
                 </div>
-                );
-            }
-        }
-        
-export default Front;
+
+            </div>
+        );
+    }
+}
+
+function mapStateToProps(state) {
+    let isAuthenticated = state.authentication.isAuthenticated;
+    return {
+        isAuthenticated
+    };
+}
+export default connect(mapStateToProps)(Front)

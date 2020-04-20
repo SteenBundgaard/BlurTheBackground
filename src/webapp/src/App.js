@@ -40,10 +40,10 @@ class App extends Component {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Front} />
-            <Route path="/TermsOfService" component={TermsOfService} />
-            <Route path="/PrivacyPolicy" component={PrivacyPolicy} />
-            <Route path="/SignIn" component={SignIn} />
-            <PrivateRoute path="/Upload" component={Upload} isAuthenticated={this.props.isAuthenticated}/>
+            <Route path="/terms-of-service" component={TermsOfService} />
+            <Route path="/privacy-policy" component={PrivacyPolicy} />
+            <Route path="/sign-in" component={SignIn} />
+            <PrivateRoute path="/upload" component={Upload} isAuthenticated={this.props.isAuthenticated}/>
           </Switch>
           <Footer />
         </div>

@@ -7,10 +7,9 @@ class TopMenu extends Component {
         return (
             <div>
                 <li><Link to="/About">About</Link></li>
-                {!this.props.isAuthenticated && <li><Link to="/TryIt">Try It</Link></li>}
-                {/* {!this.props.isAuthenticated && <li><Link to="/SignIn">Sign in</Link></li>} */}
-                <li><Link to="/SignIn">Sign in</Link></li>}
-                {this.props.isAuthenticated && <li><Link to="/Upload">Upload</Link></li>}
+                {!this.props.isAuthenticated && <li><Link to="/try-it">Try It</Link></li>}
+                {!this.props.isAuthenticated && <li><Link to="/sign-in">Sign in</Link></li>}
+                {this.props.isAuthenticated && <li><Link to="/upload">Upload</Link></li>}
             </div>
         )
     }

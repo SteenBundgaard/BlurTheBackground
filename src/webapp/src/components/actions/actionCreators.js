@@ -31,7 +31,7 @@ function apiLogin() {
                     dispatch(failure()); 
                 }); 
             } else {
-                dispatch(failure());
+                dispatch(reset());
             }
         }); 
     };
@@ -39,4 +39,5 @@ function apiLogin() {
     function request() { return { type: loginActions.LOGIN_REQUEST } }
     function success(token) { return { type: loginActions.LOGIN_SUCCESS, token } }
     function failure() { return { type: loginActions.LOGIN_FAILURE } }
+    function reset() { return { type: loginActions.LOGIN_RESET } }
 }
