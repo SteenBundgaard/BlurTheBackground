@@ -5,10 +5,11 @@ import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './common/configureStore';
 import { routerMiddleware } from 'react-router-redux'
-import { history } from './components/helpers/history';
+import { history } from './client/helpers/history';
+import { refreshTokenMiddleware } from './client/middleware/refreshTokenMiddleware';
 
 const middleware = routerMiddleware(history)
-const store = configureStore([middleware]);
+const store = configureStore([middleware, refreshTokenMiddleware]);
 
 hydrate(
   <Router history={history}>

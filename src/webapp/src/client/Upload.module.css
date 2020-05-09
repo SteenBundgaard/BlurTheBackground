@@ -1,0 +1,14 @@
+.imageCenter {
+    height: 40vmin; 
+    width: auto;
+    display: block;
+    margin-Left: auto; 
+    margin-Right: auto;
+}
+  
+.button {
+	border: 0;
+	text-decoration: underline;
+	background-color: transparent;
+	cursor: pointer;
+}

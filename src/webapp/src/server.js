@@ -8,6 +8,7 @@ import configureStore from './common/configureStore';
 import { Provider } from 'react-redux';
 
 const auth = require('./api/auth');
+const upload = require('./api/upload');
 const cookieParser = require('cookie-parser');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 var logger = require('morgan');
@@ -20,6 +21,7 @@ server
   .use(logger('dev'))
   .use(bodyParser.json())
   .use('/api/auth/facebook', auth)
+  .use('/api/upload', upload)
   .get('/*', (req, res) => {
     const context = {};
     const store = configureStore([]);

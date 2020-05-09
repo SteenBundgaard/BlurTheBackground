@@ -1,0 +1,32 @@
+.background {
+  background-image: url("../images/item4.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 160vh;
+}
+
+.container {
+  display: flex;
+  top: 100;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.container .row {
+  margin: 0 auto;
+}
+
+.small {
+  font-size: 8px;
+}
+
+.spinner {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0px;
+  right: 0;
+  z-index: 2;
+}

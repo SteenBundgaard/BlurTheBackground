@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Front from './components/Front'
-import Footer from './components/Footer'
-import TermsOfService from './components/TermsOfService'
-import PrivacyPolicy from './components/PrivacyPolicy'
-import SignIn from './components/SignIn'
-import ScrollToTop from './components/ScrollToTop';
-import MountMaterialize from './components/MountMaterialize';
-import PrivateRoute from './components/PrivateRoute';
-import FacebookInit from './components/FacebookInit';
-import Upload from './components/Upload'
+import Navbar from './client/Navbar'
+import Front from './client/Front'
+import Footer from './client/Footer'
+import TermsOfService from './client/TermsOfService'
+import PrivacyPolicy from './client/PrivacyPolicy'
+import SignIn from './client/SignIn'
+import ScrollToTop from './client/ScrollToTop';
+import MountMaterialize from './client/MountMaterialize';
+import PrivateRoute from './client/PrivateRoute';
+import FacebookInit from './client/FacebookInit';
+import Upload from './client/Upload'
 import { connect } from 'react-redux'
 import 'materialize-css/dist/css/materialize.min.css';
 import './style.css'
-
+ 
 class App extends Component {
 
   componentDidMount = () => {    
