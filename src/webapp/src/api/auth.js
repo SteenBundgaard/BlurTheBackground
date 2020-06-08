@@ -14,7 +14,8 @@ router.route('/')
             }
 
             const token = jwt.sign({
-                id: user.id
+                id: user.id,
+                name: user.name
             }, process.env.JWTSecretKey,
             {
                 expiresIn: 60 * 15 

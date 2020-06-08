@@ -3,12 +3,12 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
-import bodyParser from 'body-parser';
 import configureStore from './common/configureStore';
 import { Provider } from 'react-redux';
 
 const auth = require('./api/auth');
 const upload = require('./api/upload');
+const checkToken = require('./api/checkToken');
 const cookieParser = require('cookie-parser');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 var logger = require('morgan');
@@ -19,9 +19,9 @@ server
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .use(cookieParser())
   .use(logger('dev'))
-  .use(bodyParser.json())
+  .use(express.json({limit: '50mb'}))
   .use('/api/auth/facebook', auth)
-  .use('/api/upload', upload)
+  .use('/api/upload', checkToken, upload)
   .get('/*', (req, res) => {
     const context = {};
     const store = configureStore([]);

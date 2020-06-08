@@ -15,6 +15,7 @@ INPUT_SIZE = 513
 INPUT_TENSOR = 'ImageTensor:0'
 OUTPUT_TENSOR = 'SemanticPredictions:0'
 
+
 def load_pb(path_to_pb):
     with tf.gfile.GFile(path_to_pb, "rb") as f:
         graph_def = tf.GraphDef()
@@ -84,7 +85,7 @@ def fit(path_to_pb, path_to_image):
     final = cv2.add(foreground, background)
     final = final / np.max(final)
     #final = np.where(seg_image > 0, cv2_image, background)
-    io.imsave('final.jpg', img_as_ubyte(final))
+    io.imsave('final.jpg', img_as_ubyte(final), quality=95)
     
     #cv2.imshow('frame', cv2.cvtColor((final).astype(np.float32), cv2.COLOR_RGB2BGR))
     #cv2.waitKey()

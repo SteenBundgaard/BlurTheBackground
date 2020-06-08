@@ -1,5 +1,5 @@
-import { loginActions } from './action-types/loginActions';
-import jwtDecode from 'jwt-decode';
+import { loginActions } from './action-types/loginActions'
+import { uploadActions } from './action-types/uploadActions'
 import { push } from 'react-router-redux'
 
 export const actions = {
@@ -22,7 +22,7 @@ function apiLogin() {
                 fetch('/api/auth/facebook', options).then(r => {
                     const token = r.headers.get('x-auth-token');
                     if (token && r.ok) {
-                        dispatch(success(jwtDecode(token)));
+                        dispatch(success(token));
                         dispatch(push('/'));
                     }
                     else {
@@ -47,7 +47,7 @@ function apiLogin() {
 function refreshToken() {
     return dispatch => {
         let refreshTokenPromise = new Promise(function (resolve, reject) {
-            
+
             apiLogin()(action => {
                 if (action.type === loginActions.LOGIN_SUCCESS) {
                     dispatch(action);
@@ -64,16 +64,31 @@ function refreshToken() {
     }
 }
 
-function upload() {
-    return dispatch => {
+function upload(rawImage, name) {
+    return (dispatch, getState) => {
+        dispatch({ type: uploadActions.UPLOADING, image: rawImage, name: name });
+        const token = getState().authentication.token;
         const options = {
             method: 'POST',
-            body: Blob,
-            cache: 'default'
+            body: JSON.stringify({ image: rawImage.split(',')[1] }),
+            cache: 'default',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         };
-        fetch('/api/upload/', options).then(r => {
-        }).catch(err => {
-
-        });
+        fetch('/api/upload/', options)
+            .then(r => {
+                if (r.ok) {
+                    r.json().then(json => dispatch({ type: uploadActions.UPLOADED, image: json.image }));
+                } else {
+                    dispatch(failure());
+                }
+            }
+            ).catch(err => {
+                dispatch(failure());
+            });
     }
+
+    function failure() { return { type: uploadActions.FAILURE } }
 }
