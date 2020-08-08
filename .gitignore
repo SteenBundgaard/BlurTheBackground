@@ -160,3 +160,4 @@ build
 .env.production.local
 
 src/service/*.jpg
+.ionide/symbolCache.db

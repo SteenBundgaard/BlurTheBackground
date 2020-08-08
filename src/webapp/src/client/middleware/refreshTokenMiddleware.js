@@ -9,7 +9,6 @@ export function refreshTokenMiddleware({ dispatch, getState }) {
             if (token) {
                 token = jwtDecode(token);
                 if ((token.exp - 5) * 1000 <= Date.now()) {
-
                     if (!getState().authentication.refreshTokenPromise) {
                         return actions.refreshToken()(dispatch).then(() => next(action));
                     } else {

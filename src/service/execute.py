@@ -24,7 +24,7 @@ def load_pb(path_to_pb):
         tf.import_graph_def(graph_def, name='')
         return graph
         
-def fit(path_to_pb, path_to_image):
+def fit(path_to_pb, path_to_image, downscale):
     graph = load_pb(path_to_pb)
     seg_map, image = fit_to_model(graph, path_to_image)
     seg_map = cv2.resize(seg_map, image.shape[:2][::-1], interpolation =cv2.INTER_NEAREST)
@@ -84,6 +84,8 @@ def fit(path_to_pb, path_to_image):
     # Add the masked foreground and background
     final = cv2.add(foreground, background)
     final = final / np.max(final)
+    if (downscale):
+        final = resize_image(img_as_ubyte(final))
     #final = np.where(seg_image > 0, cv2_image, background)
     io.imsave('final.jpg', img_as_ubyte(final), quality=95)
     
@@ -120,19 +122,22 @@ def blur_background2(image):
 
 def fit_to_model(graph, path_to_image):
     sess = tf.Session(graph=graph)
-    cv2_image = io.imread(path_to_image) # /255.0 # cv2.imread(path_to_image)
-    image = Image.fromarray(cv2_image)
+    io_image = io.imread(path_to_image) # /255.0 # cv2.imread(path_to_image)
+    resized_im = resize_image(io_image)
     # model
-    width, height = image.size
-
-    resize_ratio = 1.0 * INPUT_SIZE / max(width, height)
-    target_size = (int(resize_ratio * width), int(resize_ratio * height))
-    resized_im = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
     batch_seg_map = sess.run(
         OUTPUT_TENSOR,
         feed_dict={INPUT_TENSOR: [np.asarray(resized_im)]})
     seg_map = batch_seg_map[0]
-    return seg_map, cv2_image
+    return seg_map, io_image
+
+def resize_image(io_image):
+    image = Image.fromarray(io_image)        
+    width, height = image.size
+    resize_ratio = 1.0 * INPUT_SIZE / max(width, height)
+    target_size = (int(resize_ratio * width), int(resize_ratio * height))
+    resized_im = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
+    return resized_im
 
 def find_bounding_boxes(image):
     gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -152,4 +157,4 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, nargs=1)
     parser.add_argument('--image', type=str, nargs=1)
     args = parser.parse_args()
-    fit(args.model[0], args.image[0])
+    fit(args.model[0], args.image[0], False)

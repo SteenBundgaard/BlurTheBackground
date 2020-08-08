@@ -71,9 +71,9 @@ class Upload extends Component {
                                <img src={img} className={Style.imageCenter} />                           
                             </div>
                             <div className="card-action">
-                                <input ref={this.imageUploader} onChange={this.handleImageUpload} className={Style.button} type='file' accept="image/jpeg" />
-                                {!this.props.processing && !hasProcessedImage && <a href="#" onClick={this.onUpload}>Upload Image</a>}
-                                {hasProcessedImage && <a href="#" onClick={this.onDownload}>Download Image</a>}   
+                                <input tag='input' ref={this.imageUploader} onChange={this.handleImageUpload} className={Style.button} type='file' accept="image/jpeg" />
+                                {!this.props.processing && !hasProcessedImage && <a href="#" tag='upload' onClick={this.onUpload}>Upload Image</a>}
+                                {hasProcessedImage && <a tag='download' href="#" onClick={this.onDownload}>Download Image</a>}   
                                 {this.props.processing && <a>Processing - this may take a couple of minutes</a>}                             
                             </div>
                             <div>

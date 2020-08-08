@@ -11,6 +11,7 @@ import MountMaterialize from './client/MountMaterialize';
 import PrivateRoute from './client/PrivateRoute';
 import FacebookInit from './client/FacebookInit';
 import Upload from './client/Upload'
+import TryIt from './client/TryIt'
 import { connect } from 'react-redux'
 import 'materialize-css/dist/css/materialize.min.css';
 import './style.css'
@@ -43,6 +44,7 @@ class App extends Component {
             <Route path="/terms-of-service" component={TermsOfService} />
             <Route path="/privacy-policy" component={PrivacyPolicy} />
             <Route path="/sign-in" component={SignIn} />
+            <Route path="/try-it" component={TryIt} />
             <PrivateRoute path="/upload" component={Upload} isAuthenticated={this.props.isAuthenticated}/>
           </Switch>
           <Footer />

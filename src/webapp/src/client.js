@@ -11,6 +11,10 @@ import { refreshTokenMiddleware } from './client/middleware/refreshTokenMiddlewa
 const middleware = routerMiddleware(history)
 const store = configureStore([middleware, refreshTokenMiddleware]);
 
+if (window.Cypress) {
+  window.store = store
+}
+
 hydrate(
   <Router history={history}>
     <Provider store={store}>
