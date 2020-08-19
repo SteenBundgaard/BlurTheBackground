@@ -37,6 +37,7 @@ router.route('/')
                 .then(serviceRes => res.status(200).send({ image: 'data:image/jpg;base64,' + serviceRes.data }))
                 .catch((error) => {
                     logger.error(JSON.stringify(error))
+                    next(error);
                 })
                 .finally(() => {
                     dequeue();

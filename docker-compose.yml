@@ -5,3 +5,13 @@ services:
     restart: always
     ports: 
       -  "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - JWTSecretKey=$JWTSecretKey
+      - ClientSecret=$ClientSecret
+      - ImageService=http://service:5000
+  service:
+    image: $ServiceImage:latest
+    restart: always
+    ports: 
+      -  "5000:5000"

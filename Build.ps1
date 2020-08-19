@@ -1,20 +1,24 @@
 [CmdletBinding()]
-param([string] $frozenModel = "..\SegmentationModel\frozen_inference_graph.pb", 
+param([string] $frozenModel = "/frozen_inference_graph.pb",
       [bool] $buildService = $true,
-      [bool] $buildApp = $true,
-      [Parameter(Mandatory=$true)][string] $dockerUserName,
-      [Parameter(Mandatory=$true)][securestring] $dockerPassword)
+      [bool] $buildApp = $true)
 
-[PSCredential]::new(0, $dockerPassword).GetNetworkCredential().Password | docker login --username=$dockerUserName --password-stdin $Env:dockerRegistry
+$password = ConvertTo-SecureString $Env:DockerPassword -AsPlainText -Force
+[PSCredential]::new(0, $password).GetNetworkCredential().Password | docker login --username=$Env:DockerUserName --password-stdin $Env:DockerRegistry
 
-if ($buildService -eq $true)
-{
-    $dockerBuildPath = "./src/service"
-    Copy-Item $frozenModel $dockerBuildPath
-    docker build --rm -f "./src/service/Dockerfile" -t $Env:ServiceImage "./src/service"
-    docker push $Env:ServiceImage
-    $modelName = Split-Path $frozenModel -leaf
-    Remove-Item (Join-Path -Path $dockerBuildPath -ChildPath $modelName)
+if ($buildService -eq $true) {
+      $body = "{`"path`":`"$frozenModel`"}"
+      $token = "Bearer $Env:AuthToken"
+      $modelPath = "./src/service$frozenModel"
+ 
+      Invoke-RestMethod `
+            -Method POST `
+            -Uri "https://content.dropboxapi.com/2/files/download" `
+            -Headers @{ "Authorization" = $token; "Dropbox-API-Arg" = $body; "scope" = "files.content.read" } `
+           -OutFile $modelPath -ContentType ""
+      docker build --rm -f "./src/service/Dockerfile" -t $Env:ServiceImage "./src/service"
+      docker push $Env:ServiceImage
+      Remove-Item $modelPath
 }
 
 if ($buildApp -eq $true)
@@ -23,4 +27,4 @@ if ($buildApp -eq $true)
     docker push $Env:WebAppImage
 }
 
-docker logout $Env:dockerRegistry
+docker logout $Env:DockerRegistry
