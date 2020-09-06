@@ -11,7 +11,7 @@ class Processor(Resource):
         binary_format = bytearray(image)
         file = open('input.jpg', mode="wb")
         file.write(binary_format)
-        fit('./frozen_inference_graph.pb', './input.jpg', request.args.get('downscale'))
+        fit('./frozen_inference_graph.pb', './input.jpg', True if request.args.get('downscale') == 'true' else False)
 
 class Reader(Resource):
     def get(self):

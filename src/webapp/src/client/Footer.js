@@ -10,7 +10,7 @@ class Footer extends Component {
                         <div className="col l6 s12">
                             <h5 className="white-text">Photography Blog</h5>
                             <ul>
-                                 <li><Link to="/blog" className="grey-text text-lighten-4">Panasonic G9 impressions - Playing with DFD</Link></li>
+                                 <li><Link to="/blog" className="grey-text text-lighten-4">Panasonic G9 - shooting portraits at f2.8?</Link></li>
                             </ul>
 
                         </div>
@@ -24,7 +24,7 @@ class Footer extends Component {
                         <div className="col l3 s12">
                             <h5 className="white-text">Contact</h5>
                             <ul>
-                                <li><address><a className="white-text" href="mailto:blurbackgroundonline@gmail.com">Jon Doe</a></address></li>                               
+                                <li><address><a className="white-text" href="mailto:blurbackgroundonline@gmail.com">Administrator</a></address></li>                               
                             </ul>
                         </div>
                     </div>

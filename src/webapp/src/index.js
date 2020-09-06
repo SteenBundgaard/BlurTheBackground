@@ -19,7 +19,7 @@ server.listen(process.env.PORT || 3000, error => {
   console.log('port = ' + process.env.PORT);
   console.log('🚀 started');
 });
-
+server.timeout = 600000;
 if (module.hot) {
   console.log('✅  Server-side HMR Enabled!');
 
