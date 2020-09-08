@@ -7,11 +7,11 @@ import configureStore from './common/configureStore';
 import { Provider } from 'react-redux';
 
 const auth = require('./api/auth');
-const upload = require('./api/upload');
 const checkToken = require('./api/checkToken');
 const cookieParser = require('cookie-parser');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
-var logger = require('morgan');
+const logger = require('morgan');
+import upload from './api/upload';
 
 const server = express();
 server

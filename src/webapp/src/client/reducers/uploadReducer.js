@@ -11,7 +11,7 @@ const initState = {
 const uploadReducer = (state = initState, action) => {
     switch (action.type) {
         case uploadActions.CLEARING: {
-           return clearedState();
+           return initState;
         }
         case uploadActions.UPLOADING: {
             return {
@@ -24,7 +24,7 @@ const uploadReducer = (state = initState, action) => {
         }
         case uploadActions.UPLOADED: {
             if (!state.processing) {
-                return clearedState();
+                return initState;
             }
             return {
                 rawImage: [],
@@ -45,16 +45,6 @@ const uploadReducer = (state = initState, action) => {
         }    
         default:
             return state;
-    }
-}
-
-function clearedState() { 
-    return {
-        rawImage: [],
-        processedImage: [],
-        processing: false,
-        failure: false,
-        name: null
     }
 }
 

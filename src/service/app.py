@@ -2,6 +2,7 @@ import base64
 from flask import Flask, request, Response
 from flask_restful import Api, Resource, reqparse
 from execute import fit
+from _thread import start_new_thread
 
 #img_base64
 class Processor(Resource):
@@ -11,7 +12,12 @@ class Processor(Resource):
         binary_format = bytearray(image)
         file = open('input.jpg', mode="wb")
         file.write(binary_format)
-        fit('./frozen_inference_graph.pb', './input.jpg', True if request.args.get('downscale') == 'true' else False)
+        downscale = True if request.args.get('downscale') == 'true' else False
+        start_new_thread(fit, ('./frozen_inference_graph.pb', './input.jpg', downscale))
+        response = Response()
+        response.status_code = 200
+        return response
+                
 
 class Reader(Resource):
     def get(self):
