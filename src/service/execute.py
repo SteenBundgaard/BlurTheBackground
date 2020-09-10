@@ -29,23 +29,10 @@ def load_pb(path_to_pb):
 def fit(path_to_pb, path_to_image, downscale):
     if os.path.exists('final.jpg'):
         os.remove('final.jpg')
-    graph = load_pb(path_to_pb)
+    
     logging.info('step 1')
-    seg_map, image = fit_to_model(graph, path_to_image)
-    seg_map = cv2.resize(seg_map, image.shape[:2][::-1], interpolation =cv2.INTER_NEAREST)
-    logging.info('step 2')
-   
-    # Only keep the person class
-    seg_map = np.where(seg_map == 15, seg_map, 0)  
-    # Output: RGB image resized from original input image, segmentation map of resized image 
-    # color of mask
-    seg_image = get_dataset_colormap.label_to_color_image(
-        seg_map, get_dataset_colormap.get_pascal_name()).astype(np.uint8)
- 
-    seg_image_mono = (seg_image[:,:,0]+seg_image[:,:,1]+seg_image[:,:,2]).astype(np.uint8)   
-    background = greyscales_2_color((np.where(seg_image_mono == 0, image[:,:,0], 0), np.where(seg_image_mono == 0, image[:,:,1], 0), np.where(seg_image_mono == 0, image[:,:,2], 0)))
-    # io.imsave('background.jpg', img_as_ubyte(background))
-    foreground = greyscales_2_color((np.where(seg_image_mono > 0, image[:,:,0], 0), np.where(seg_image_mono > 0, image[:,:,1], 0), np.where(seg_image_mono > 0, image[:,:,2], 0)))
+
+    seg_image_mono, background, image = seperate_foreground_background(path_to_pb, path_to_image)
     # io.imsave('foreground.jpg', img_as_ubyte(foreground))
     logging.info('step 3')
    
@@ -55,15 +42,8 @@ def fit(path_to_pb, path_to_image, downscale):
     background = np.round(greyscales_2_color(background)).astype(int)
     logging.info('step 4')
    
-    # bounding_boxes = find_bounding_boxes(seg_image)
-    # for box in bounding_boxes:
-    #     crop = background[box[0]:box[2]][box[1]:box[3]][:]
-
     # io.imsave('blurred.jpg', img_as_ubyte(background))
-    mask = gaussian_filter(mask, sigma=3)
-    mask = mask.astype(np.float32)/255
-    mask = mask[:,:,np.newaxis]
-    mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2RGB)
+    mask = filter_mask(mask)
     # io.imsave('mask.jpg', img_as_ubyte(mask))
     logging.info('step 5')
    
@@ -82,6 +62,32 @@ def fit(path_to_pb, path_to_image, downscale):
     #final = np.where(seg_image > 0, cv2_image, background)
     io.imsave('final.jpg', img_as_ubyte(final), quality=95)
     logging.info('step 7')   
+
+def filter_mask(mask):
+    mask = gaussian_filter(mask, sigma=3)
+    mask = mask.astype(np.float32)/255
+    mask = mask[:,:,np.newaxis]
+    mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2RGB)
+    return mask
+
+def seperate_foreground_background(path_to_pb, path_to_image):
+    graph = load_pb(path_to_pb)
+    seg_map, image = fit_to_model(graph, path_to_image)
+    seg_map = cv2.resize(seg_map, image.shape[:2][::-1], interpolation =cv2.INTER_NEAREST)
+    logging.info('step 2')
+
+    # Only keep the person class
+    seg_map = np.where(seg_map == 15, seg_map, 0)  
+    # Output: RGB image resized from original input image, segmentation map of resized image 
+    # color of mask
+    seg_image = get_dataset_colormap.label_to_color_image(
+        seg_map, get_dataset_colormap.get_pascal_name()).astype(np.uint8)
+
+    seg_image_mono = (seg_image[:,:,0]+seg_image[:,:,1]+seg_image[:,:,2]).astype(np.uint8)   
+    background = greyscales_2_color((np.where(seg_image_mono == 0, image[:,:,0], 0), np.where(seg_image_mono == 0, image[:,:,1], 0), np.where(seg_image_mono == 0, image[:,:,2], 0)))
+    # io.imsave('background.jpg', img_as_ubyte(background))
+    foreground = greyscales_2_color((np.where(seg_image_mono > 0, image[:,:,0], 0), np.where(seg_image_mono > 0, image[:,:,1], 0), np.where(seg_image_mono > 0, image[:,:,2], 0)))
+    return seg_image_mono, background, image
 
 def greyscales_2_color(greyscales):
     return np.concatenate([a[:,:,np.newaxis] for a in greyscales], axis=2)

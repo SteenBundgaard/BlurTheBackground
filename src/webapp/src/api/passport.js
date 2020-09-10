@@ -6,7 +6,7 @@ passport.use(
     new FacebookTokenStrategy(
         {
             clientID: '222286185833824',
-            clientSecret: process.env.clientSecret,
+            clientSecret: process.env.ClientSecret,
             profileFields: [
                 'id',
                 'displayName',

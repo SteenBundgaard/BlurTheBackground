@@ -24,8 +24,8 @@ class Front extends Component {
                             </div>
                             <br /><br />
                         </div>
-                    </div>
-                    <div className="parallax"><img src={Item1} alt="Unsplashed background img 1" /></div>
+                    </div>   
+                    <div className="parallax"><img src={Item1} style={{objectPosition: "0px 200px"}} alt="Unsplashed background img 1" /></div>
                 </div>
 
                 <div className="container">

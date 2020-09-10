@@ -9,7 +9,7 @@ router.route('/')
     .post(function (req, res, next) {
         passport.authenticate('facebook-token', { session: false, scope : ['email'] }, function (err, user, info) {
             if (!user) {
-                logger.info('Auhentication failed: ' + info);
+                logger.info('Auhentication failed: ' + err);
                 return res.send(401, 'User Not Authenticated');
             }
 

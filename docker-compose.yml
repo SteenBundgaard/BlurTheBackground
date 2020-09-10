@@ -1,17 +1,17 @@
 version: '3.3'
 services:
   webapp:
-    image: $WebAppImage:latest
+    image: ${WebAppImage}:latest
     restart: always
     ports: 
       -  "3000:3000"
     environment:
       - NODE_ENV=production
-      - JWTSecretKey=$JWTSecretKey
-      - ClientSecret=$ClientSecret
+      - JWTSecretKey=${JWTSecretKey}
+      - ClientSecret=${ClientSecret}
       - ImageService=http://service:5000
   service:
-    image: $ServiceImage:latest
+    image: ${ServiceImage}:latest
     restart: always
     ports: 
       -  "5000:5000"
