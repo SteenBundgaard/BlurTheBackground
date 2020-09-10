@@ -4,12 +4,13 @@ This repository is the source code of a web app that demonstrates modern image s
 
 The TensorFlow model is not part of this repository and the code requires an external model to be provided. 
 
-As Proof-Of-Concept the web app is deployed on the web for everyone to play with: [blurbackground.online]https://blurbackground.online
+As Proof-Of-Concept the web app is deployed on the web for everyone to play with: [blurbackground.online](https://blurbackground.online)
 
 The current deployed App utilizes the DeepLabV3 semantic image segmentation model by Google Research.
 
 ## Technology overview
 
+* Javascript for Web app
 * React/Redux for Front End
 * Razzle for Server Side Rendering
 * Express for API backend
