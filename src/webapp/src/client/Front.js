@@ -19,6 +19,9 @@ class Front extends Component {
                                 <h5 className="header col s12 light">An AI based approach to improve foreground-background seperation on portraits</h5>
                             </div>
                             <div className="row center">
+                                <h5 className="header col s12 light">A free online utility that can improve background blur on your images</h5>
+                            </div>
+                            <div className="row center">
                             {!this.props.isAuthenticated && <Link to="/try-it" className="btn-large waves-effect waves-light teal lighten-1">Try It</Link>}
                             {this.props.isAuthenticated && <Link to="/upload" className="btn-large waves-effect waves-light teal lighten-1">Upload</Link>}
                             </div>

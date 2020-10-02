@@ -1,8 +1,9 @@
 const { performance } = require('perf_hooks');
-
+const store = require('./store');
 const express = require('express');
 const logger = require('./logger');
 const axios = require('axios');
+
 
 function queue() {
     var self = this;
@@ -29,7 +30,7 @@ async function pollImageService() {
         try {
             const result = await axios.get(imageService + '/processed');
             return { data: result.data };
-        } catch (error) {       
+        } catch (error) {
         }
     }
     return Promise.reject('processing failed');
@@ -48,22 +49,25 @@ router.route('/')
     .post(function (req, res, next) {
         logger.info('uploading');
         const t0 = performance.now();
-        uploadQueue.enqueue(dequeue => {
-            const t1 = performance.now();
-            logger.info(`processing (time in queue was ${t1 - t0})`);
-            axios.post(imageService + '/unprocessed', req.body.image, { headers: { 'Content-Type': 'plain/text' }, params: { downscale: !req.authorized } })
-                .then(serviceRes => pollImageService())
-                .then(serviceRes => res.status(200).send({ image: 'data:image/jpg;base64,' + serviceRes.data }))
-                .catch((error) => {
-                    logger.error(JSON.stringify(error.response))
-                    next(error);
-                })
-                .finally(() => {
-                    dequeue();
-                    const t2 = performance.now();
-                    logger.info(`done (processing time was ${t2 - t1})`);
-                });
+        new Promise(() => {
+            uploadQueue.enqueue(dequeue => {
+                const t1 = performance.now();
+                logger.info(`processing (time in queue was ${t1 - t0})`);
+                axios.post(imageService + '/unprocessed', req.body.image, { headers: { 'Content-Type': 'plain/text' }, params: { downscale: !req.authorized } })
+                    .then(serviceRes => pollImageService())
+                    .then(serviceRes => store.set(req.token, {status: 200, image: 'data:image/jpg;base64,' + serviceRes.data }))
+                    .catch((error) => {
+                        logger.error(JSON.stringify(error.response))
+                        store.set(req.token, {status: 500})
+                    })
+                    .finally(() => {
+                        dequeue();
+                        const t2 = performance.now();
+                        logger.info(`done (processing time was ${t2 - t1})`);
+                    });
+            });
         });
+        res.send(200);
     });
 
 export default router;

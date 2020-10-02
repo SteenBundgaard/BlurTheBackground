@@ -11,6 +11,7 @@ const checkToken = require('./api/checkToken');
 const cookieParser = require('cookie-parser');
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 const logger = require('morgan');
+const fetch = require('./api/fetch');
 import upload from './api/upload';
 
 const server = express();
@@ -22,6 +23,7 @@ server
   .use(express.json({limit: '50mb'}))
   .use('/api/auth/facebook', auth)
   .use('/api/upload', checkToken, upload)
+  .use('/api/fetch', checkToken, fetch)
   .get('/*', (req, res) => {
     const context = {};
     const store = configureStore([]);
@@ -44,6 +46,7 @@ server
         <meta charset="utf-8" />
         <title>Blur the Background - improve foreground seperation</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/favicon.ico">
         ${
         assets.client.css
           ? `<link rel="stylesheet" href="${assets.client.css}">`

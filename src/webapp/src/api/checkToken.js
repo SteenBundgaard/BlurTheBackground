@@ -8,7 +8,6 @@ function checkToken(req, res, next) {
         const token = authHeader.split(' ')[1];
         jwt.verify(token, process.env.JWTSecretKey, (err, decoded) => {
             if (err) {
-                //return res.status(401).send();
                 req.authorized = false;
             } else {
                 req.authorized = true;

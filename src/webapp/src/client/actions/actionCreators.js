@@ -67,7 +67,9 @@ function refreshToken() {
 function upload(rawImage, name) {
     return (dispatch, getState) => {
         dispatch({ type: uploadActions.UPLOADING, image: rawImage, name: name });
-        const token = getState().authentication.token;
+        let token = getState().authentication.token;
+        if (!token)
+            token = uuidv4();
         const options = {
             method: 'POST',
             body: JSON.stringify({ image: rawImage.split(',')[1] }),
@@ -78,17 +80,55 @@ function upload(rawImage, name) {
             }
         };
         fetch('/api/upload/', options)
-            .then(r => {
-                if (r.ok) {
-                    r.json().then(json => dispatch({ type: uploadActions.UPLOADED, image: json.image }));
-                } else {
-                    dispatch(failure());
-                }
-            }
-            ).catch(err => {
+            .then(r => poll(token, dispatch))
+            .catch(err => {
+                console.log('fail');
                 dispatch(failure());
             });
     }
 
     function failure() { return { type: uploadActions.FAILURE } }
+
+    function uuidv4() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
+    }
+
+    function poll(token, dispatch) {
+        return new Promise((resolve, reject) => {
+            let max = 60;
+            function callFetch() {
+                console.log('yeah');
+                max--;
+                try {
+                    const options = {
+                        method: 'GET',
+                        cache: 'default',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                    fetch('/api/fetch/', options)
+                        .then(r => {
+                            if (r.status === 200) {
+                                r.json().then(json => dispatch({ type: uploadActions.UPLOADED, image: json.image }))
+                                resolve();
+                                return;
+                            }
+                            if (r.status > 299) {
+                                reject('processing failed');
+                                return;
+                            }
+                            setTimeout(callFetch, 10000);
+                        });
+                } catch (error) {
+                    console.log(error);
+                    reject('processing failed')
+                }
+            }
+            callFetch();   
+        });
+    }
 }
