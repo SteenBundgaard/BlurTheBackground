@@ -17,10 +17,7 @@ class Front extends Component {
                             <h1 className="header center teal-text text-lighten-2">Blur the Background</h1>
                             <div className="row center">
                                 <h5 className="header col s12 light">An AI based approach to improve foreground-background seperation on portraits</h5>
-                            </div>
-                            <div className="row center">
-                                <h5 className="header col s12 light">A free online utility that can improve background blur on your images</h5>
-                            </div>
+                            </div>                           
                             <div className="row center">
                             {!this.props.isAuthenticated && <Link to="/try-it" className="btn-large waves-effect waves-light teal lighten-1">Try It</Link>}
                             {this.props.isAuthenticated && <Link to="/upload" className="btn-large waves-effect waves-light teal lighten-1">Upload</Link>}
@@ -68,7 +65,7 @@ class Front extends Component {
                     <div className="section no-pad-bot">
                         <div className="container">
                             <div className="row center">
-                                <h5 className="header col s12 light">The era of computational photography</h5>
+                                <h5 className="header col s12 light">A free online utility that can improve background blur in your images</h5>
                             </div>
                         </div>
                     </div>
